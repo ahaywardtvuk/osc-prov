@@ -10,9 +10,7 @@
 This document explains the Template Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
 This is the place to add a short introduction.
 
-- Examples:
-  - [Item example](examples/item.json): Shows the basic usage of the extension in a STAC Item
-  - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
+- Examples: TODO
 - [JSON Schema](json-schema/schema.json)
 - [Changelog](./CHANGELOG.md)
 
