@@ -5,16 +5,16 @@
   "description": "An experimental extension to demonstrate how provenance information might be added to the EarthCODE Open Science Catalogue based on examples from OSPD. This is quickly thrown together to get our OSPD examples to validate in OSC and is not in a final state",
   "oneOf": [
     {
-      "$ref": "#/definitions/workflow"
+      "$ref": "#/$defs/workflow"
     },
     {
-      "$ref": "#/definitions/experiment"
+      "$ref": "#/$defs/experiment"
     },
     {
-      "$ref": "#/definitions/product"
+      "$ref": "#/$defs/product"
     },
     {
-      "$ref": "#/definitions/project"
+      "$ref": "#/$defs/project"
     }
   ],
   "$defs": {
@@ -51,7 +51,7 @@
           }
         },
         {
-          "$ref": "#/definitions/stac_extensions"
+          "$ref": "#/$defs/stac_extensions"
         }
       ]
     },
@@ -62,7 +62,7 @@
           "$ref": "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json"
         },
         {
-          "$ref": "#/definitions/conformsTo"
+          "$ref": "#/$defs/conformsTo"
         }
       ],
       "properties": {
@@ -151,7 +151,7 @@
           "$ref": "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json"
         },
         {
-          "$ref": "#/definitions/conformsTo"
+          "$ref": "#/$defs/conformsTo"
         }
       ],
       "properties": {
@@ -359,7 +359,7 @@
           }
         },
         {
-          "$ref": "#/definitions/stac_extensions"
+          "$ref": "#/$defs/stac_extensions"
         }
       ]
 
