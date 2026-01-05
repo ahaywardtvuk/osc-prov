@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://ahaywardtvuk.github.io/osc-prov/v0.0.1/schema.json#",
+  "$schema": "http://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ahaywardtvuk.github.io/osc-prov/v0.1.0/schema.json#",
   "title": "OSC Provenance Extension",
   "description": "An experimental extension to demonstrate how provenance information might be added to the EarthCODE Open Science Catalogue based on examples from OSPD. This is quickly thrown together to get our OSPD examples to validate in OSC and is not in a final state",
   "oneOf": [
@@ -116,27 +116,27 @@
               "x-jsonld-type": "@id"
             },
             "osc-prov:wasDerivedFrom": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
               "x-jsonld-type": "@id"
             },
             "osc-prov:alternateOf": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
               "x-jsonld-type": "@id"
             },
             "osc-prov:hadPrimarySource": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
               "x-jsonld-type": "@id"
             },
             "osc-prov:specializationOf": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
               "x-jsonld-type": "@id"
             },
             "osc-prov:wasRevisionOf": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
               "x-jsonld-type": "@id"
             }
@@ -205,27 +205,27 @@
               "x-jsonld-type": "@id"
             },
             "osc-prov:wasDerivedFrom": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
               "x-jsonld-type": "@id"
             },
             "osc-prov:alternateOf": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
               "x-jsonld-type": "@id"
             },
             "osc-prov:hadPrimarySource": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
               "x-jsonld-type": "@id"
             },
             "osc-prov:specializationOf": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
               "x-jsonld-type": "@id"
             },
             "osc-prov:wasRevisionOf": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
               "x-jsonld-type": "@id"
             },
@@ -344,7 +344,7 @@
               }
             },
             "osc-prov:wasDerivedFrom": {
-              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds",
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
               "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
               "x-jsonld-type": "@id"
             },
