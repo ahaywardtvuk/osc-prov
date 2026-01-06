@@ -1,0 +1,444 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ahaywardtvuk.github.io/osc-prov/v0.1.3/schema.json#",
+  "title": "OSC Provenance Extension",
+  "description": "An experimental extension to demonstrate how provenance information might be added to the EarthCODE Open Science Catalogue based on examples from OSPD. This is quickly thrown together to get our OSPD examples to validate in OSC and is not in a final state",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/workflow"
+    },
+    {
+      "$ref": "#/$defs/experiment"
+    },
+    {
+      "$ref": "#/$defs/product"
+    },
+    {
+      "$ref": "#/$defs/project"
+    }
+  ],
+  "$defs": {
+    "project": {
+      "$comment": "A Project is a STAC Collection and, in provenance terms, a non-Workflow Activity.",
+      "type": "object",
+      "allOf": [
+        {
+          "required": [
+            "type",
+            "osc-prov:type",
+            "osc-prov:generated"
+          ],
+          "properties": {
+            "type": {
+              "const": "Collection"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "Activity"
+              }
+            },
+            "osc-prov:generated": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/stac_extensions"
+        }
+      ]
+    },
+    "workflow": {
+      "$comment": "This is an example schema for a workflow record that extends the GeoDCAT-AP OGC API Records schema and includes provenance information.",
+      "allOf": [
+        {
+          "$ref": "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json"
+        },
+        {
+          "$ref": "#/$defs/conformsTo"
+        }
+      ],
+      "properties": {
+        "properties": {
+          "type": "object",
+          "required": [
+            "type",
+            "osc-prov:type"
+          ],
+          "properties": {
+            "type": {
+              "const": "workflow"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "Workflow"
+              }
+            },
+            "osc-prov:hasInput": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "$ref": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/inputDescription/schema.json"
+              }
+            },
+            "osc-prov:hasOutput": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "$ref": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/outputDescription/schema.json"
+              }
+            },
+            "osc-prov:has_provenance": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Prov",
+              "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+              "x-jsonld-type": "@id"
+            },
+
+            "osc-prov:wasGeneratedBy": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasAttributedTo": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasDerivedFrom": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:alternateOf": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:hadPrimarySource": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:specializationOf": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasRevisionOf": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+              "x-jsonld-type": "@id"
+            }
+          }
+        }
+      }
+    },
+    "experiment": {
+      "$comment": "This is an example schema for an experiment record that extends the GeoDCAT-AP OGC API Records schema and includes provenance information.",
+      "allOf": [
+        {
+          "$ref": "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json"
+        },
+        {
+          "$ref": "#/$defs/conformsTo"
+        }
+      ],
+      "properties": {
+        "properties": {
+          "type": "object",
+          "required": [
+            "type",
+            "osc-prov:type",
+            "osc-prov:describedByWorkflow"
+          ],
+          "properties": {
+            "type": {
+              "const": "experiment"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "WorkflowRun"
+              }
+            },
+            "osc-prov:hasInput": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "$ref": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/inputDescription/schema.json"
+              }
+            },
+            "osc-prov:hasOutput": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "$ref": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/outputDescription/schema.json"
+              }
+            },
+            "osc-prov:has_provenance": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Prov",
+              "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasGeneratedBy": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasAttributedTo": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasDerivedFrom": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:alternateOf": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:hadPrimarySource": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:specializationOf": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasRevisionOf": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:describedByWorkflow": {
+              "type": "string",
+              "format": "uri",
+              "description": "Links to the workflow description (wfdesc:Workflow) that was executed",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#describedByWorkflow",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:hadSubProcessRun": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "description": "The process runs that were part of this workflow execution",
+              "x-jsonld-reverse": "wfprov:wasPartOfWorkflowRun",
+              "x-jsonld-type": "@id",
+              "x-jsonld-container": "@set"
+            },
+            "osc-prov:describedByProcess": {
+              "type": "string",
+              "format": "uri",
+              "description": "Links to the process description (wfdesc:Process) that was executed",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#describedByProcess",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:usedInput": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "description": "Input artifacts used by this process run",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#usedInput",
+              "x-jsonld-type": "@id",
+              "x-jsonld-container": "@set"
+            },
+            "osc-prov:startedAtTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start time of the execution",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#startedAtTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+            },
+            "osc-prov:endedAtTime": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End time of the execution",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#endedAtTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+            },
+            "osc-prov:wasPartOfWorkflowRun": {
+              "type": "string",
+              "format": "uri",
+              "description": "The workflow run that this process run was part of",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#wasPartOfWorkflowRun",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:generated": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "osc-prov:wasEnactedBy": {
+              "$ref": "#/$defs/WorkflowEngineOrRefId"
+            }
+          }
+        }
+      }
+    },
+    "product": {
+      "$comment": "A Product is a STAC Collection produced by an Experiment.",
+      "type": "object",
+      "allOf": [
+        {
+          "required": [
+            "type",
+            "osc-prov:type",
+            "osc-prov:wasOutputFrom"
+          ],
+          "properties": {
+            "type": {
+              "const": "Collection"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "Artifact"
+              }
+            },
+            "osc-prov:wasDerivedFrom": {
+              "$ref": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id"
+            },
+            "osc-prov:wasOutputFrom": {
+              "type": "string",
+              "format": "uri"
+            },
+            "osc-prov:describedByParameter": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/stac_extensions"
+        }
+      ]
+
+    },
+
+    "conformsTo": {
+      "type": "object",
+      "required": [
+        "conformsTo"
+      ],
+      "properties": {
+        "conformsTo": {
+          "type": "array",
+          "contains": {
+            "const": "https://ahaywardtvuk.github.io/osc-prov/v0.1.0/schema.json"
+          }
+        }
+      }
+    },
+    "stac_extensions": {
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "const": "https://ahaywardtvuk.github.io/osc-prov/v0.1.0/schema.json"
+          }
+        }
+      }
+    },
+    "WorkflowEngine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uri",
+          "description": "Unique identifier for the workflow engine"
+        },
+        "type": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "contains": {
+              "const": "WorkflowEngine"
+            }
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the workflow engine",
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#label"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the workflow engine",
+          "x-jsonld-id": "http://schema.org/version"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the workflow engine",
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#comment"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ]
+    },
+    "WorkflowEngineOrRefId": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/WorkflowEngine"
+        }, {
+          "type": "string",
+          "format": "uri",
+          "description": "The workflow engine that enacted this process run",
+          "x-jsonld-id": "http://purl.org/wf4ever/wfprov#WorkflowEngine",
+          "x-jsonld-type": "@id"
+        }
+      ]
+    }
+  }
+}
