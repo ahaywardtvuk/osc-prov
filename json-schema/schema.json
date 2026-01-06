@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft/2020-12/schema",
-  "$id": "https://ahaywardtvuk.github.io/osc-prov/v0.1.2/schema.json#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ahaywardtvuk.github.io/osc-prov/v0.1.3/schema.json#",
   "title": "OSC Provenance Extension",
   "description": "An experimental extension to demonstrate how provenance information might be added to the EarthCODE Open Science Catalogue based on examples from OSPD. This is quickly thrown together to get our OSPD examples to validate in OSC and is not in a final state",
   "oneOf": [
