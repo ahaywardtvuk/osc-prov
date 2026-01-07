@@ -1,0 +1,4903 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ahaywardtvuk.github.io/osc-prov/v0.1.4/schema.json",
+  "title": "OSC Provenance Extension",
+  "description": "An experimental extension to demonstrate how provenance information might be added to the EarthCODE Open Science Catalogue based on examples from OSPD. This is quickly thrown together to get our OSPD examples to validate in OSC and is not in a final state",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/workflow"
+    },
+    {
+      "$ref": "#/$defs/experiment"
+    },
+    {
+      "$ref": "#/$defs/product"
+    },
+    {
+      "$ref": "#/$defs/project"
+    }
+  ],
+  "$defs": {
+    "project": {
+      "$comment": "A Project is a STAC Collection and, in provenance terms, a non-Workflow Activity.",
+      "type": "object",
+      "allOf": [
+        {
+          "required": [ "type", "osc-prov:type", "osc-prov:generated" ],
+          "properties": {
+            "type": {
+              "const": "Collection"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "contains": {
+                "const": "Activity"
+              },
+              "items": {
+                "type": "string"
+              }
+            },
+            "osc-prov:generated": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/stac_extensions"
+        }
+      ]
+    },
+    "workflow": {
+      "$comment": "This is an example schema for a workflow record that extends the GeoDCAT-AP OGC API Records schema and includes provenance information.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json"
+        },
+        {
+          "$ref": "#/$defs/conformsTo"
+        }
+      ],
+      "properties": {
+        "properties": {
+          "type": "object",
+          "required": [ "type", "osc-prov:type" ],
+          "properties": {
+            "type": {
+              "const": "workflow"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "contains": {
+                "const": "Workflow"
+              },
+              "items": {
+                "type": "string"
+              }
+            },
+            "osc-prov:hasInput": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/inputDescription/schema.json",
+                "type": "object"
+              }
+            },
+            "osc-prov:hasOutput": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/outputDescription/schema.json",
+                "type": "object"
+              }
+            },
+            "osc-prov:has_provenance": {
+              "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Prov"
+            },
+            "osc-prov:wasGeneratedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "osc-prov:wasAttributedTo": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+            },
+            "osc-prov:wasDerivedFrom": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:alternateOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:hadPrimarySource": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:specializationOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:wasRevisionOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            }
+          }
+        }
+      }
+    },
+    "experiment": {
+      "$comment": "This is an example schema for an experiment record that extends the GeoDCAT-AP OGC API Records schema and includes provenance information.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json"
+        },
+        {
+          "$ref": "#/$defs/conformsTo"
+        }
+      ],
+      "properties": {
+        "properties": {
+          "type": "object",
+          "required": [
+            "type",
+            "osc-prov:type",
+            "osc-prov:describedByWorkflow"
+          ],
+          "properties": {
+            "type": {
+              "const": "experiment"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "contains": {
+                "const": "WorkflowRun"
+              },
+              "items": {
+                "type": "string"
+              }
+            },
+            "osc-prov:hasInput": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/inputDescription/schema.json",
+                "type": "object"
+              }
+            },
+            "osc-prov:hasOutput": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/outputDescription/schema.json",
+                "type": "object"
+              }
+            },
+            "osc-prov:has_provenance": {
+              "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Prov"
+            },
+            "osc-prov:wasGeneratedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "osc-prov:wasAttributedTo": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+            },
+            "osc-prov:wasDerivedFrom": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:alternateOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:hadPrimarySource": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:specializationOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:wasRevisionOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:describedByWorkflow": {
+              "description": "Links to the workflow description (wfdesc:Workflow) that was executed",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#describedByWorkflow",
+              "x-jsonld-type": "@id",
+              "type": "string",
+              "format": "uri"
+            },
+            "osc-prov:hadSubProcessRun": {
+              "description": "The process runs that were part of this workflow execution",
+              "x-jsonld-container": "@set",
+              "x-jsonld-reverse": "wfprov:wasPartOfWorkflowRun",
+              "x-jsonld-type": "@id",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "id" ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "osc-prov:describedByProcess": {
+              "description": "Links to the process description (wfdesc:Process) that was executed",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#describedByProcess",
+              "x-jsonld-type": "@id",
+              "type": "string",
+              "format": "uri"
+            },
+            "osc-prov:usedInput": {
+              "description": "Input artifacts used by this process run",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#usedInput",
+              "x-jsonld-type": "@id",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "id" ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            },
+            "osc-prov:startedAtTime": {
+              "description": "Start time of the execution",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#startedAtTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime",
+              "type": "string",
+              "format": "date-time"
+            },
+            "osc-prov:endedAtTime": {
+              "description": "End time of the execution",
+              "x-jsonld-id": "http://www.w3.org/ns/prov#endedAtTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime",
+              "type": "string",
+              "format": "date-time"
+            },
+            "osc-prov:wasPartOfWorkflowRun": {
+              "description": "The workflow run that this process run was part of",
+              "x-jsonld-id": "http://purl.org/wf4ever/wfprov#wasPartOfWorkflowRun",
+              "x-jsonld-type": "@id",
+              "type": "string",
+              "format": "uri"
+            },
+            "osc-prov:generated": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "osc-prov:wasEnactedBy": {
+              "$ref": "#/$defs/WorkflowEngineOrRefId"
+            }
+          }
+        }
+      }
+    },
+    "product": {
+      "$comment": "A Product is a STAC Collection produced by an Experiment.",
+      "type": "object",
+      "allOf": [
+        {
+          "required": [ "type", "osc-prov:type", "osc-prov:wasOutputFrom" ],
+          "properties": {
+            "type": {
+              "const": "Collection"
+            },
+            "osc-prov:type": {
+              "type": "array",
+              "contains": {
+                "const": "Artifact"
+              },
+              "items": {
+                "type": "string"
+              }
+            },
+            "osc-prov:wasDerivedFrom": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#/$defs/oneOrMoreEntitiesOrRefIds"
+            },
+            "osc-prov:wasOutputFrom": {
+              "type": "string",
+              "format": "uri"
+            },
+            "osc-prov:describedByParameter": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/stac_extensions"
+        }
+      ]
+    },
+    "conformsTo": {
+      "type": "object",
+      "required": [ "conformsTo" ],
+      "properties": {
+        "conformsTo": {
+          "type": "array",
+          "contains": {
+            "const": "https://ahaywardtvuk.github.io/osc-prov/v0.1.4/schema.json"
+          }
+        }
+      }
+    },
+    "stac_extensions": {
+      "type": "object",
+      "required": [ "stac_extensions" ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "const": "https://ahaywardtvuk.github.io/osc-prov/v0.1.4/schema.json"
+          }
+        }
+      }
+    },
+    "WorkflowEngine": {
+      "type": "object",
+      "required": [ "id", "type" ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the workflow engine",
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "array",
+          "contains": {
+            "const": "WorkflowEngine"
+          },
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "Name of the workflow engine",
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#label",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the workflow engine",
+          "x-jsonld-id": "http://schema.org/version",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the workflow engine",
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#comment",
+          "type": "string"
+        }
+      }
+    },
+    "WorkflowEngineOrRefId": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/WorkflowEngine"
+        },
+        {
+          "description": "The workflow engine that enacted this process run",
+          "x-jsonld-id": "http://purl.org/wf4ever/wfprov#WorkflowEngine",
+          "x-jsonld-type": "@id",
+          "type": "string",
+          "format": "uri"
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/additionalParameter/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/additionalParameter/schema.json",
+      "type": "object",
+      "required": [ "name", "value" ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "object"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/metadata/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/metadata/schema.json",
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json",
+      "type": "object",
+      "required": [ "$ref" ],
+      "properties": {
+        "$ref": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json",
+      "x-jsonld-vocab": "https://w3id.org/ogc/api/schema/",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "additionalProperties": {
+              "default": true,
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "allOf": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                  },
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                  }
+                ]
+              }
+            },
+            "anyOf": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                  },
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                  }
+                ]
+              }
+            },
+            "contentEncoding": {
+              "type": "string"
+            },
+            "contentMediaType": {
+              "type": "string"
+            },
+            "contentSchema": {
+              "type": "string"
+            },
+            "default": {},
+            "deprecated": {
+              "default": false,
+              "type": "boolean"
+            },
+            "description": {
+              "type": "string"
+            },
+            "enum": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": false,
+              "items": {}
+            },
+            "example": {},
+            "exclusiveMaximum": {
+              "default": false,
+              "type": "boolean"
+            },
+            "exclusiveMinimum": {
+              "default": false,
+              "type": "boolean"
+            },
+            "format": {
+              "type": "string"
+            },
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                }
+              ]
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxLength": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxProperties": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maximum": {
+              "type": "number"
+            },
+            "minItems": {
+              "default": 0,
+              "type": "integer",
+              "minimum": 0
+            },
+            "minLength": {
+              "default": 0,
+              "type": "integer",
+              "minimum": 0
+            },
+            "minProperties": {
+              "default": 0,
+              "type": "integer",
+              "minimum": 0
+            },
+            "minimum": {
+              "type": "number"
+            },
+            "multipleOf": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "not": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                }
+              ]
+            },
+            "nullable": {
+              "default": false,
+              "type": "boolean"
+            },
+            "oneOf": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                  },
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                  }
+                ]
+              }
+            },
+            "pattern": {
+              "type": "string",
+              "format": "regex"
+            },
+            "properties": {
+              "type": "object",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+                  },
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/reference/schema.json"
+                  }
+                ]
+              }
+            },
+            "readOnly": {
+              "default": false,
+              "type": "boolean"
+            },
+            "required": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "title": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "array",
+                "boolean",
+                "integer",
+                "number",
+                "object",
+                "string"
+              ]
+            },
+            "uniqueItems": {
+              "default": false,
+              "type": "boolean"
+            },
+            "writeOnly": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/descriptionType/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/descriptionType/schema.json",
+      "type": "object",
+      "properties": {
+        "additionalParameters": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/metadata/schema.json"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "parameters": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/additionalParameter/schema.json"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/metadata/schema.json"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "https://opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/iri-or-curie/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/iri-or-curie/schema.json",
+      "description": "IRI or CURIE",
+      "$ref": "#/$defs/Single",
+      "$defs": {
+        "IRI": {
+          "type": "string",
+          "pattern": "^\\w+:/*([^:<>{}|\\\\^`\"\\s/]+[^<>{}|\\\\^`\"\\s]*(:[^:<>{}|\\\\^`\"\\s]+)?)?$"
+        },
+        "CURIE": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][^\\s:/]*:[^:<>{}|\\\\^`\"\\s]*(\\?[^<>{}|\\\\^`\" ]*)?(#[^<>{}|\\\\^`\"\\s]*)?$"
+        },
+        "LocalPart": {
+          "type": "string",
+          "pattern": "^[^:<>{}|\\\\^`\"\\s]*(\\?[^<>{}|\\\\^`\"\\s]*)?(#[^<>{}|\\\\^`\"\\s]*)?$"
+        },
+        "Single": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IRI"
+            },
+            {
+              "$ref": "#/$defs/CURIE"
+            },
+            {
+              "$ref": "#/$defs/LocalPart"
+            }
+          ]
+        },
+        "Multiple": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Single"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Single"
+              }
+            }
+          ]
+        },
+        "MultipleOrObject": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Multiple"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "MultipleOrObjectOrNull": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MultipleOrObject"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "https://opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/json-link/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/json-link/schema.json",
+      "description": "JSON Link",
+      "x-jsonld-prefixes": {
+        "oa": "http://www.w3.org/ns/oa#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dct": "http://purl.org/dc/terms/"
+      },
+      "type": "object",
+      "required": [ "href", "rel" ],
+      "properties": {
+        "href": {
+          "x-jsonld-id": "http://www.w3.org/ns/oa#hasTarget",
+          "x-jsonld-type": "@id",
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "rel": {
+          "x-jsonld-base": "http://www.iana.org/assignments/relation/",
+          "x-jsonld-id": "http://www.iana.org/assignments/relation",
+          "x-jsonld-type": "@id",
+          "type": "string"
+        },
+        "anchor": {
+          "type": "string"
+        },
+        "type": {
+          "x-jsonld-id": "http://purl.org/dc/terms/type",
+          "type": "string"
+        },
+        "hreflang": {
+          "x-jsonld-id": "http://purl.org/dc/terms/language",
+          "type": "string"
+        },
+        "title": {
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#label",
+          "type": "string"
+        },
+        "length": {
+          "x-jsonld-id": "http://purl.org/dc/terms/extent",
+          "type": "integer"
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/outputDescription/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/outputDescription/schema.json",
+      "x-jsonld-extra-terms": {
+        "title": "http://purl.org/dc/terms/title",
+        "description": "http://purl.org/dc/terms/description",
+        "keywords": "https://w3id.org/ogc/api/processes/keywords",
+        "nullable": "https://w3id.org/ogc/api/processes/nullable",
+        "type": "https://w3id.org/ogc/api/processes/type",
+        "$ref": {
+          "x-jsonld-id": "https://w3id.org/ogc/api/processes/ref",
+          "x-jsonld-type": "@id"
+        },
+        "default": {
+          "x-jsonld-id": "https://w3id.org/ogc/api/processes/default",
+          "x-jsonld-type": "@json"
+        },
+        "minOccurs": "https://w3id.org/ogc/api/processes/minOccurs",
+        "maxOccurs": "https://w3id.org/ogc/api/processes/maxOccurs",
+        "enum": {
+          "x-jsonld-id": "https://w3id.org/ogc/api/processes/enum",
+          "x-jsonld-container": "@set"
+        }
+      },
+      "x-jsonld-prefixes": {
+        "dct": "http://purl.org/dc/terms/",
+        "proc": "https://w3id.org/ogc/api/processes/"
+      },
+      "x-jsonld-vocab": "https://w3id.org/ogc/api/processes/",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/descriptionType/schema.json"
+        },
+        {
+          "type": "object",
+          "required": [ "schema" ],
+          "properties": {
+            "schema": {
+              "x-jsonld-id": "https://w3id.org/ogc/api/processes/schema",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+            }
+          }
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/inputDescription/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/inputDescription/schema.json",
+      "x-jsonld-extra-terms": {
+        "title": "http://purl.org/dc/terms/title",
+        "description": "http://purl.org/dc/terms/description",
+        "keywords": "https://w3id.org/ogc/api/processes/keywords",
+        "nullable": "https://w3id.org/ogc/api/processes/nullable",
+        "type": "https://w3id.org/ogc/api/processes/type",
+        "$ref": {
+          "x-jsonld-id": "https://w3id.org/ogc/api/processes/ref",
+          "x-jsonld-type": "@id"
+        },
+        "default": {
+          "x-jsonld-id": "https://w3id.org/ogc/api/processes/default",
+          "x-jsonld-type": "@json"
+        },
+        "enum": {
+          "x-jsonld-id": "https://w3id.org/ogc/api/processes/enum",
+          "x-jsonld-container": "@set"
+        }
+      },
+      "x-jsonld-prefixes": {
+        "dct": "http://purl.org/dc/terms/",
+        "proc": "https://w3id.org/ogc/api/processes/"
+      },
+      "x-jsonld-vocab": "https://w3id.org/ogc/api/processes/",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/descriptionType/schema.json"
+        },
+        {
+          "type": "object",
+          "required": [ "schema" ],
+          "properties": {
+            "maxOccurs": {
+              "x-jsonld-id": "https://w3id.org/ogc/api/processes/maxOccurs",
+              "oneOf": [
+                {
+                  "default": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "string",
+                  "enum": [ "unbounded" ]
+                }
+              ]
+            },
+            "minOccurs": {
+              "default": 1,
+              "x-jsonld-id": "https://w3id.org/ogc/api/processes/minOccurs",
+              "type": "integer"
+            },
+            "schema": {
+              "x-jsonld-id": "https://w3id.org/ogc/api/processes/schema",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-processes/build/annotated/api/processes/v1/schemas/schema/schema.json"
+            }
+          }
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/time/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/time/schema.json",
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "timestamp": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+        },
+        "interval": {
+          "type": "array",
+          "maxItems": 2,
+          "minItems": 2,
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+              },
+              {
+                "type": "string",
+                "enum": [ ".." ]
+              }
+            ]
+          }
+        },
+        "resolution": {
+          "description": "Minimum time period resolvable in the dataset, as an ISO 8601 duration",
+          "type": "string"
+        }
+      },
+      "nullable": true
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/theme/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/theme/schema.json",
+      "x-jsonld-prefixes": {
+        "thns": "https://w3id.org/ogc/stac/themes/",
+        "dct": "http://purl.org/dc/terms/"
+      },
+      "type": "object",
+      "required": [ "concepts", "scheme" ],
+      "properties": {
+        "concepts": {
+          "description": "One or more entity/concept identifiers from this knowledge\nsystem. it is recommended that a resolvable URI be used for\neach entity/concept identifier.",
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "https://w3id.org/ogc/stac/themes/concepts",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [ "id" ],
+            "properties": {
+              "id": {
+                "description": "An identifier for the concept.",
+                "x-jsonld-id": "https://w3id.org/ogc/stac/themes/id",
+                "type": "string"
+              },
+              "title": {
+                "description": "A human readable title for the concept.",
+                "x-jsonld-id": "http://purl.org/dc/terms/title",
+                "type": "string"
+              },
+              "description": {
+                "description": "A human readable description for the concept.",
+                "x-jsonld-id": "http://purl.org/dc/terms/description",
+                "type": "string"
+              },
+              "url": {
+                "description": "A URI providing further description of the concept.",
+                "x-jsonld-id": "@id",
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "scheme": {
+          "description": "An identifier for the knowledge organization system used\nto classify the resource.  It is recommended that the\nidentifier be a resolvable URI.  The list of schemes used\nin a searchable catalog can be determined by inspecting\nthe server's OpenAPI document or, if the server implements\nCQL2, by exposing a queryable (e.g. named `scheme`) and\nenumerating the list of schemes in the queryable's schema\ndefinition.",
+          "x-jsonld-id": "https://w3id.org/ogc/stac/themes/scheme",
+          "type": "string"
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/license/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/license/schema.json",
+      "description": "A legal document under which the resource is made available.\nIf the resource is being made available under a common license\nthen use an SPDX license id (https://spdx.org/licenses/).\nIf the resource is being made available under multiple common\nlicenses then use an SPDX license expression v2.3 string\n(https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/)\nIf the resource is being made available under one or more licenses\nthat haven't been assigned an SPDX identifier or one or more custom\nlicenses then use a string value of 'other' and include one or more\nlinks (rel=\"license\") in the `link` section of the record to the\nfile(s) that contains the text of the license(s).\nThere is also the case of a resource that is private or unpublished\nand is thus unlicensed; in this case do not register such a resource\nin the catalog in the first place since there is no point in making\nsuch a resource discoverable.",
+      "type": "string"
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/language/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/language/schema.json",
+      "description": "The language used for textual values in this record.",
+      "type": "object",
+      "required": [ "code" ],
+      "properties": {
+        "code": {
+          "description": "The language tag as per RFC-5646.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The untranslated name of the language.",
+          "type": "string",
+          "minLength": 1
+        },
+        "alternate": {
+          "description": "The name of the language in another well-understood language,\nusually English.",
+          "type": "string"
+        },
+        "dir": {
+          "description": "The direction for text in this language. The default, `ltr`\n(left-to-right), represents the most common situation.\nHowever, care should be taken to set the value of `dir`\nappropriately if the language direction is not `ltr`.\nOther values supported are `rtl` (right-to-left), `ttb`\n(top-to-bottom), and `btt` (bottom-to-top).",
+          "default": "ltr",
+          "type": "string",
+          "enum": [ "ltr", "rtl", "ttb", "btt" ]
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/roles/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/roles/schema.json",
+      "description": "The list of duties, job functions or permissions assigned by the system\nand associated with the context of this member.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/contact/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/contact/schema.json",
+      "description": "Identification of, and means of communication with, person responsible\nfor the resource.",
+      "$comment": "Adapted from https://raw.githubusercontent.com/opengeospatial/ogcapi-records/master/core/openapi/schemas/contact.yaml",
+      "type": "object",
+      "anyOf": [
+        {
+          "required": [ "name" ]
+        },
+        {
+          "required": [ "organization" ]
+        }
+      ],
+      "properties": {
+        "identifier": {
+          "description": "A value uniquely identifying a contact.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the responsible person.",
+          "type": "string"
+        },
+        "position": {
+          "description": "The name of the role or position of the responsible person taken from the organization's formal organizational hierarchy or chart.",
+          "type": "string"
+        },
+        "organization": {
+          "description": "Organization/affiliation of the contact.",
+          "type": "string"
+        },
+        "logo": {
+          "description": "Graphic identifying a contact. The link relation should be `icon` and the media type should be an image media type.",
+          "allOf": [
+            {
+              "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/json-link/schema.json"
+            },
+            {
+              "type": "object",
+              "required": [ "rel", "type" ],
+              "properties": {
+                "rel": {
+                  "enum": [ "icon" ]
+                }
+              }
+            }
+          ]
+        },
+        "phones": {
+          "description": "Telephone numbers at which contact can be made.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "value" ],
+            "properties": {
+              "value": {
+                "description": "The value is the phone number itself.",
+                "type": "string",
+                "pattern": "^\\+[1-9]{1}[0-9]{3,14}$",
+                "example": "+14165550142"
+              },
+              "roles": {
+                "description": "The type of phone number (e.g. home, work, fax, etc.).",
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/roles/schema.json"
+              }
+            }
+          }
+        },
+        "emails": {
+          "description": "Email addresses at which contact can be made.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [ "value" ],
+            "properties": {
+              "value": {
+                "description": "The value is the email number itself.",
+                "type": "string",
+                "format": "email"
+              },
+              "roles": {
+                "description": "The type of email (e.g. home, work, etc.).",
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/roles/schema.json"
+              }
+            }
+          }
+        },
+        "addresses": {
+          "description": "Physical location at which contact can be made.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "deliveryPoint": {
+                "description": "Address lines for the location.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "city": {
+                "description": "City for the location.",
+                "type": "string"
+              },
+              "administrativeArea": {
+                "description": "State or province of the location.",
+                "type": "string"
+              },
+              "postalCode": {
+                "description": "ZIP or other postal code.",
+                "type": "string"
+              },
+              "country": {
+                "description": "Country of the physical address.  ISO 3166-1 is recommended.",
+                "type": "string"
+              },
+              "roles": {
+                "description": "The type of address (e.g. office, home, etc.).",
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/roles/schema.json"
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "On-line information about the contact.",
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/json-link/schema.json"
+              },
+              {
+                "type": "object",
+                "required": [ "type" ]
+              }
+            ]
+          }
+        },
+        "hoursOfService": {
+          "description": "Time period when the contact can be contacted.",
+          "type": "string",
+          "example": "Hours: Mo-Fr 10am-7pm Sa 10am-22pm Su 10am-21pm"
+        },
+        "contactInstructions": {
+          "description": "Supplemental instructions on how or when to contact the\nresponsible party.",
+          "type": "string"
+        },
+        "roles": {
+          "description": "The set of named duties, job functions and/or permissions associated with this contact. (e.g. developer, administrator, etc.).",
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/roles/schema.json"
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/link/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/link/schema.json",
+      "$comment": "Adapted from https://github.com/opengeospatial/ogcapi-records/raw/master/core/openapi/schemas/link.yaml",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkBase/schema.json"
+        },
+        {
+          "type": "object",
+          "required": [ "href" ],
+          "properties": {
+            "href": {
+              "allOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkBase/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkBase/schema.json",
+      "$comment": "Adapted from https://github.com/opengeospatial/ogcapi-records/raw/master/core/openapi/schemas/linkBase.yaml",
+      "x-jsonld-extra-terms": {
+        "href": {
+          "x-jsonld-type": "@id",
+          "x-jsonld-id": "http://www.w3.org/ns/oa#hasTarget"
+        }
+      },
+      "x-jsonld-prefixes": {
+        "oa": "http://www.w3.org/ns/oa#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dct": "http://purl.org/dc/terms/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#"
+      },
+      "type": "object",
+      "properties": {
+        "rel": {
+          "description": "The type or semantics of the relation.",
+          "x-jsonld-base": "http://www.iana.org/assignments/relation/",
+          "x-jsonld-id": "http://www.iana.org/assignments/relation",
+          "x-jsonld-type": "@id",
+          "type": "string",
+          "example": "alternate"
+        },
+        "type": {
+          "description": "A hint indicating what the media type of the result of dereferencing the link should be.",
+          "x-jsonld-id": "http://purl.org/dc/terms/format",
+          "type": "string",
+          "example": "application/geo+json"
+        },
+        "hreflang": {
+          "description": "A hint indicating what the language of the result of dereferencing the link should be.",
+          "x-jsonld-id": "http://purl.org/dc/terms/language",
+          "type": "string",
+          "example": "en"
+        },
+        "title": {
+          "description": "Used to label the destination of a link such that it can be used as a human-readable identifier.",
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#label",
+          "type": "string",
+          "example": "Trierer Strasse 70, 53115 Bonn"
+        },
+        "length": {
+          "x-jsonld-id": "http://purl.org/dc/terms/extent",
+          "type": "integer"
+        },
+        "created": {
+          "description": "Date of creation of the resource pointed to by the link.",
+          "x-jsonld-id": "http://purl.org/dc/terms/created",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated": {
+          "description": "Most recent date on which the resource pointed to by the link was changed.",
+          "x-jsonld-id": "http://purl.org/dc/terms/modified",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkTemplate/schema.json": {
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkTemplate/schema.json",
+      "$comment": "Adapted from https://raw.githubusercontent.com/opengeospatial/ogcapi-records/master/core/openapi/schemas/linkTemplate.yaml",
+      "x-jsonld-prefixes": {
+        "rec": "https://www.opengis.net/def/ogc-api/records/",
+        "dct": "http://purl.org/dc/terms/"
+      },
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkBase/schema.json"
+        },
+        {
+          "type": "object",
+          "required": [ "uriTemplate" ],
+          "properties": {
+            "uriTemplate": {
+              "description": "Supplies a resolvable URI to a remote resource (or resource fragment).",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/uriTemplate",
+              "x-jsonld-type": "xsd:string",
+              "type": "string",
+              "example": "http://data.example.com/buildings/(building-id}"
+            },
+            "varBase": {
+              "description": "The base URI to which the variable name can be appended to retrieve the definition of the variable as a JSON Schema fragment.",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/varBase",
+              "type": "string",
+              "format": "url"
+            },
+            "variables": {
+              "description": "This object contains one key per substitution variable in the templated URL.  Each key defines the schema of one substitution variable using a JSON Schema fragment and can thus include things like the data type of the variable, enumerations, minimum values, maximum values, etc.",
+              "x-jsonld-container": "@index",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/hasVariable",
+              "x-jsonld-index": "http://purl.org/dc/terms/identifier",
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    "https://opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/bounding_box/schema.json": {
+      "$id": "https://opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/bounding_box/schema.json",
+      "type": "array",
+      "oneOf": [
+        {
+          "maxItems": 4,
+          "minItems": 4
+        },
+        {
+          "maxItems": 6,
+          "minItems": 6
+        }
+      ],
+      "items": {
+        "type": "number"
+      }
+    },
+    "https://opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/geojson/schema.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "$id": "https://opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/geojson/schema.json",
+      "title": "GeoJSON Feature",
+      "x-jsonld-extra-terms": {
+        "Feature": "https://purl.org/geojson/vocab#Feature",
+        "FeatureCollection": "https://purl.org/geojson/vocab#FeatureCollection",
+        "GeometryCollection": "https://purl.org/geojson/vocab#GeometryCollection",
+        "LineString": "https://purl.org/geojson/vocab#LineString",
+        "MultiLineString": "https://purl.org/geojson/vocab#MultiLineString",
+        "MultiPoint": "https://purl.org/geojson/vocab#MultiPoint",
+        "MultiPolygon": "https://purl.org/geojson/vocab#MultiPolygon",
+        "Point": "https://purl.org/geojson/vocab#Point",
+        "Polygon": "https://purl.org/geojson/vocab#Polygon",
+        "features": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "https://purl.org/geojson/vocab#features"
+        }
+      },
+      "x-jsonld-prefixes": {
+        "geojson": "https://purl.org/geojson/vocab#"
+      },
+      "type": "object",
+      "required": [ "type", "properties", "geometry" ],
+      "properties": {
+        "type": {
+          "x-jsonld-id": "@type",
+          "type": "string",
+          "enum": [ "Feature" ]
+        },
+        "id": {
+          "x-jsonld-id": "@id",
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "properties": {
+          "x-jsonld-id": "@nest",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "geometry": {
+          "x-jsonld-id": "https://purl.org/geojson/vocab#geometry",
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "title": "GeoJSON Point",
+              "type": "object",
+              "required": [ "type", "coordinates" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "Point" ]
+                },
+                "coordinates": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "title": "GeoJSON LineString",
+              "type": "object",
+              "required": [ "type", "coordinates" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "LineString" ]
+                },
+                "coordinates": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "title": "GeoJSON Polygon",
+              "type": "object",
+              "required": [ "type", "coordinates" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "Polygon" ]
+                },
+                "coordinates": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "minItems": 4,
+                    "items": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "title": "GeoJSON MultiPoint",
+              "type": "object",
+              "required": [ "type", "coordinates" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "MultiPoint" ]
+                },
+                "coordinates": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "title": "GeoJSON MultiLineString",
+              "type": "object",
+              "required": [ "type", "coordinates" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "MultiLineString" ]
+                },
+                "coordinates": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "title": "GeoJSON MultiPolygon",
+              "type": "object",
+              "required": [ "type", "coordinates" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "MultiPolygon" ]
+                },
+                "coordinates": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "minItems": 4,
+                      "items": {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            {
+              "title": "GeoJSON GeometryCollection",
+              "type": "object",
+              "required": [ "type", "geometries" ],
+              "properties": {
+                "type": {
+                  "x-jsonld-id": "@type",
+                  "type": "string",
+                  "enum": [ "GeometryCollection" ]
+                },
+                "geometries": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "title": "GeoJSON Point",
+                        "type": "object",
+                        "required": [ "type", "coordinates" ],
+                        "properties": {
+                          "type": {
+                            "x-jsonld-id": "@type",
+                            "type": "string",
+                            "enum": [ "Point" ]
+                          },
+                          "coordinates": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "number"
+                            }
+                          },
+                          "bbox": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "title": "GeoJSON LineString",
+                        "type": "object",
+                        "required": [ "type", "coordinates" ],
+                        "properties": {
+                          "type": {
+                            "x-jsonld-id": "@type",
+                            "type": "string",
+                            "enum": [ "LineString" ]
+                          },
+                          "coordinates": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "bbox": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "title": "GeoJSON Polygon",
+                        "type": "object",
+                        "required": [ "type", "coordinates" ],
+                        "properties": {
+                          "type": {
+                            "x-jsonld-id": "@type",
+                            "type": "string",
+                            "enum": [ "Polygon" ]
+                          },
+                          "coordinates": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "minItems": 4,
+                              "items": {
+                                "type": "array",
+                                "minItems": 2,
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          },
+                          "bbox": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "title": "GeoJSON MultiPoint",
+                        "type": "object",
+                        "required": [ "type", "coordinates" ],
+                        "properties": {
+                          "type": {
+                            "x-jsonld-id": "@type",
+                            "type": "string",
+                            "enum": [ "MultiPoint" ]
+                          },
+                          "coordinates": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "bbox": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "title": "GeoJSON MultiLineString",
+                        "type": "object",
+                        "required": [ "type", "coordinates" ],
+                        "properties": {
+                          "type": {
+                            "x-jsonld-id": "@type",
+                            "type": "string",
+                            "enum": [ "MultiLineString" ]
+                          },
+                          "coordinates": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "array",
+                                "minItems": 2,
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          },
+                          "bbox": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "title": "GeoJSON MultiPolygon",
+                        "type": "object",
+                        "required": [ "type", "coordinates" ],
+                        "properties": {
+                          "type": {
+                            "x-jsonld-id": "@type",
+                            "type": "string",
+                            "enum": [ "MultiPolygon" ]
+                          },
+                          "coordinates": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#coordinates",
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "minItems": 4,
+                                "items": {
+                                  "type": "array",
+                                  "minItems": 2,
+                                  "items": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "bbox": {
+                            "x-jsonld-container": "@list",
+                            "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "bbox": {
+                  "x-jsonld-container": "@list",
+                  "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "bbox": {
+          "x-jsonld-container": "@list",
+          "x-jsonld-id": "https://purl.org/geojson/vocab#bbox",
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "https://opengeospatial.github.io/bblocks/annotated-schemas/geo/features/feature/schema.json": {
+      "$id": "https://opengeospatial.github.io/bblocks/annotated-schemas/geo/features/feature/schema.json",
+      "x-jsonld-extra-terms": {
+        "properties": "@nest"
+      },
+      "x-jsonld-prefixes": {
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+      },
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/geojson/schema.json"
+        },
+        {
+          "type": "object",
+          "required": [ "type", "geometry", "properties" ],
+          "properties": {
+            "bbox": {
+              "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/bounding_box/schema.json"
+            },
+            "links": {
+              "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/json-link/schema.json"
+              }
+            },
+            "type": {
+              "const": "Feature"
+            }
+          }
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/recordGeoJSON/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/recordGeoJSON/schema.json",
+      "description": "Normative records schema - adapted from https://raw.githubusercontent.com/opengeospatial/ogcapi-records/master/core/openapi/schemas/recordGeoJSON.yaml",
+      "x-jsonld-prefixes": {
+        "dct": "http://purl.org/dc/terms/",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "rec": "https://www.opengis.net/def/ogc-api/records/",
+        "skos": "http://www.w3.org/2004/02/skos/core#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "w3ctime": "http://www.w3.org/2006/time#",
+        "dctype": "http://purl.org/dc/dcmitype/",
+        "vcard": "http://www.w3.org/2006/vcard/ns#",
+        "prov": "http://www.w3.org/ns/prov#",
+        "foaf": "http://xmlns.com/foaf/0.1/"
+      },
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/geo/features/feature/schema.json"
+        }
+      ],
+      "required": [ "id", "type", "geometry", "properties", "links" ],
+      "properties": {
+        "id": {
+          "description": "A unique identifier of the catalog record.",
+          "type": "string"
+        },
+        "conformsTo": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "http://purl.org/dc/terms/conformsTo",
+          "x-jsonld-type": "@id",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [ "Feature" ]
+        },
+        "time": {
+          "x-jsonld-id": "http://purl.org/dc/terms/temporal",
+          "oneOf": [
+            {
+              "enum": [ null ]
+            },
+            {
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/time/schema.json"
+            }
+          ]
+        },
+        "geometry": {
+          "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/geo/common/data_types/geojson/schema.json#/properties/geometry"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "created": {
+              "description": "Date of creation of this record.",
+              "x-jsonld-id": "http://purl.org/dc/terms/created",
+              "type": "string",
+              "format": "date-time"
+            },
+            "updated": {
+              "description": "The most recent date on which the record was changed.",
+              "x-jsonld-id": "http://purl.org/dc/terms/modified",
+              "type": "string",
+              "format": "date-time"
+            },
+            "type": {
+              "description": "The nature or genre of the resource. The value should be a code, convenient for filtering records. Where available, a link to the canonical URI of the record type resource will be added to the 'links' property.",
+              "type": "string",
+              "maxLength": 64
+            },
+            "title": {
+              "description": "A human-readable name given to the resource.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "http://purl.org/dc/terms/title",
+              "type": "string"
+            },
+            "description": {
+              "description": "A free-text account of the resource.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "http://purl.org/dc/terms/description",
+              "type": "string"
+            },
+            "keywords": {
+              "description": "The topic or topics of the resource. Typically represented using free-form keywords, tags, key phrases, or classification codes.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "http://www.w3.org/ns/dcat#keyword",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "language": {
+              "description": "The language used for textual values in this record representation.",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/language",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/language/schema.json"
+            },
+            "languages": {
+              "description": "This list of languages in which this record is available.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/languages",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/language/schema.json"
+              }
+            },
+            "resourceLanguages": {
+              "description": "The list of languages in which the resource described by this record is available.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/resourceLanguages",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/language/schema.json"
+              }
+            },
+            "externalIds": {
+              "description": "An identifier for the resource assigned by an external (to the catalog) entity.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/scopedIdentifier",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "value" ],
+                "properties": {
+                  "scheme": {
+                    "description": "A reference to an authority or identifier for a knowledge organization system from which the external identifier was obtained. It is recommended that the identifier be a resolvable URI.",
+                    "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/scheme",
+                    "type": "string"
+                  },
+                  "value": {
+                    "description": "The value of the identifier.",
+                    "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/id",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "themes": {
+              "description": "A knowledge organization system used to classify the resource.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/themes",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/theme/schema.json"
+              }
+            },
+            "formats": {
+              "description": "A list of available distributions of the resource.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/format",
+              "x-jsonld-type": "@id",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "anyOf": [
+                  {
+                    "required": [ "name" ]
+                  },
+                  {
+                    "required": [ "mediaType" ]
+                  }
+                ],
+                "properties": {
+                  "name": {
+                    "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/name",
+                    "type": "string"
+                  },
+                  "mediaType": {
+                    "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/mediaType",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "contacts": {
+              "description": "A list of contacts qualified by their role(s) in association to the record or the resource described by the record.",
+              "x-jsonld-container": "@set",
+              "x-jsonld-id": "http://www.w3.org/ns/dcat#contactPoint",
+              "x-jsonld-type": "@id",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/contact/schema.json"
+              }
+            },
+            "license": {
+              "x-jsonld-id": "http://www.w3.org/ns/dcat#license",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/license/schema.json"
+            },
+            "rights": {
+              "description": "A statement that concerns all rights not addressed by the license such as a copyright statement.",
+              "x-jsonld-id": "http://www.w3.org/ns/dcat#rights",
+              "type": "string"
+            }
+          }
+        },
+        "links": {
+          "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/link/schema.json"
+          }
+        },
+        "linkTemplates": {
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/hasLinkTemplate",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/linkTemplate/schema.json"
+          }
+        }
+      }
+    },
+    "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/dcat-records/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/dcat-records/schema.json",
+      "description": "Schema for OGCAPI records profile for GeoDCAT - defines all extra elements defined by GeoDCAT so that the JSON-LD context can map to GeoDCAT RDF",
+      "x-jsonld-extra-terms": {
+        "time": {
+          "x-jsonld-id": "http://purl.org/dc/terms/temporal",
+          "x-jsonld-context": {
+            "interval": {
+              "@id": "http://www.w3.org/2006/time#hasTime",
+              "@container": "@list"
+            },
+            "resolution": "https://www.opengis.net/def/ogc-api/records/iso8601period"
+          }
+        },
+        "created": "http://purl.org/dc/terms/created",
+        "updated": "http://purl.org/dc/terms/modified",
+        "type": {
+          "x-jsonld-id": "http://purl.org/dc/terms/type",
+          "x-jsonld-type": "@id"
+        },
+        "title": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "http://purl.org/dc/terms/title"
+        },
+        "description": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "http://purl.org/dc/terms/description"
+        },
+        "keywords": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "http://www.w3.org/ns/dcat#keyword"
+        },
+        "conformsTo": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "http://purl.org/dc/terms/conformsTo",
+          "x-jsonld-type": "@id"
+        },
+        "language": {
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/language",
+          "x-jsonld-context": {
+            "code": "https://www.opengis.net/def/ogc-api/records/languageCode",
+            "name": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          }
+        },
+        "languages": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/languages",
+          "x-jsonld-context": {
+            "code": "https://www.opengis.net/def/ogc-api/records/languageCode",
+            "name": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          }
+        },
+        "resourceLanguages": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/resourceLanguages",
+          "x-jsonld-context": {
+            "code": "https://www.opengis.net/def/ogc-api/records/languageCode",
+            "name": "http://www.w3.org/2004/02/skos/core#prefLabel"
+          }
+        },
+        "externalIds": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/scopedIdentifier",
+          "x-jsonld-context": {
+            "scheme": "https://www.opengis.net/def/ogc-api/records/scheme",
+            "value": "https://www.opengis.net/def/ogc-api/records/id"
+          }
+        },
+        "themes": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/themes",
+          "x-jsonld-context": {
+            "concepts": {
+              "@id": "https://www.opengis.net/def/ogc-api/records/concept",
+              "@context": {
+                "id": {
+                  "@type": "http://www.w3.org/2001/XMLSchema#string",
+                  "@id": "https://www.opengis.net/def/ogc-api/records/conceptID"
+                },
+                "url": {
+                  "@type": "@id",
+                  "@id": "http://www.w3.org/ns/dcat#theme"
+                }
+              }
+            },
+            "scheme": "https://www.opengis.net/def/ogc-api/records/scheme"
+          }
+        },
+        "formats": {
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/format",
+          "x-jsonld-context": {
+            "name": {
+              "@id": "https://www.opengis.net/def/ogc-api/records/name"
+            }
+          }
+        },
+        "contacts": {
+          "x-jsonld-container": "@set",
+          "x-jsonld-id": "http://www.w3.org/ns/dcat#contactPoint",
+          "x-jsonld-type": "@id"
+        },
+        "license": "http://purl.org/dc/terms/license",
+        "accessrights": "http://purl.org/dc/terms/accessRights",
+        "linkTemplates": "https://www.opengis.net/def/ogc-api/records/hasLinkTemplate",
+        "variables": {
+          "x-jsonld-container": "@id",
+          "x-jsonld-id": "https://www.opengis.net/def/ogc-api/records/hasVariable",
+          "x-jsonld-context": {
+            "@base": "http://example.com/variables/",
+            "@vocab": "https://www.opengis.net/def/ogc-api/records/"
+          }
+        }
+      },
+      "x-jsonld-prefixes": {
+        "dct": "http://purl.org/dc/terms/",
+        "w3ctime": "http://www.w3.org/2006/time#",
+        "rec": "https://www.opengis.net/def/ogc-api/records/",
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "skos": "http://www.w3.org/2004/02/skos/core#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "dctype": "http://purl.org/dc/dcmitype/",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "vcard": "http://www.w3.org/2006/vcard/ns#",
+        "prov": "http://www.w3.org/ns/prov#",
+        "foaf": "http://xmlns.com/foaf/0.1/"
+      },
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblocks-ogcapi-records/build/annotated/api/records/v1/schemas/recordGeoJSON/schema.json"
+        }
+      ]
+    },
+    "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-entity/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-entity/schema.json",
+      "description": "PROV Activity object schema",
+      "x-jsonld-extra-terms": {
+        "activityType": "@type",
+        "agentType": "@type",
+        "Activity": "http://www.w3.org/ns/prov#Activity",
+        "ActivityInfluence": "http://www.w3.org/ns/prov#ActivityInfluence",
+        "Agent": "http://www.w3.org/ns/prov#Agent",
+        "AgentInfluence": "http://www.w3.org/ns/prov#AgentInfluence",
+        "Association": "http://www.w3.org/ns/prov#Association",
+        "Attribution": "http://www.w3.org/ns/prov#Attribution",
+        "Bundle": "http://www.w3.org/ns/prov#Bundle",
+        "Collection": "http://www.w3.org/ns/prov#Collection",
+        "Communication": "http://www.w3.org/ns/prov#Communication",
+        "Delegation": "http://www.w3.org/ns/prov#Delegation",
+        "Derivation": "http://www.w3.org/ns/prov#Derivation",
+        "EmptyCollection": "http://www.w3.org/ns/prov#EmptyCollection",
+        "End": "http://www.w3.org/ns/prov#End",
+        "Entity": "http://www.w3.org/ns/prov#Entity",
+        "EntityInfluence": "http://www.w3.org/ns/prov#EntityInfluence",
+        "Generation": "http://www.w3.org/ns/prov#Generation",
+        "Influence": "http://www.w3.org/ns/prov#Influence",
+        "InstantaneousEvent": "http://www.w3.org/ns/prov#InstantaneousEvent",
+        "Invalidation": "http://www.w3.org/ns/prov#Invalidation",
+        "Location": "http://www.w3.org/ns/prov#Location",
+        "Organization": "http://www.w3.org/ns/prov#Organization",
+        "Person": "http://www.w3.org/ns/prov#Person",
+        "Plan": "http://www.w3.org/ns/prov#Plan",
+        "PrimarySource": "http://www.w3.org/ns/prov#PrimarySource",
+        "Quotation": "http://www.w3.org/ns/prov#Quotation",
+        "Revision": "http://www.w3.org/ns/prov#Revision",
+        "Role": "http://www.w3.org/ns/prov#Role",
+        "SoftwareAgent": "http://www.w3.org/ns/prov#SoftwareAgent",
+        "Start": "http://www.w3.org/ns/prov#Start",
+        "Usage": "http://www.w3.org/ns/prov#Usage",
+        "ServiceDescription": "http://www.w3.org/ns/prov#ServiceDescription",
+        "DirectQueryService": "http://www.w3.org/ns/prov#DirectQueryService",
+        "Accept": "http://www.w3.org/ns/prov#Accept",
+        "Contribute": "http://www.w3.org/ns/prov#Contribute",
+        "Contributor": "http://www.w3.org/ns/prov#Contributor",
+        "Copyright": "http://www.w3.org/ns/prov#Copyright",
+        "Create": "http://www.w3.org/ns/prov#Create",
+        "Creator": "http://www.w3.org/ns/prov#Creator",
+        "Modify": "http://www.w3.org/ns/prov#Modify",
+        "Publish": "http://www.w3.org/ns/prov#Publish",
+        "Publisher": "http://www.w3.org/ns/prov#Publisher",
+        "Replace": "http://www.w3.org/ns/prov#Replace",
+        "RightsAssignment": "http://www.w3.org/ns/prov#RightsAssignment",
+        "RightsHolder": "http://www.w3.org/ns/prov#RightsHolder",
+        "Submit": "http://www.w3.org/ns/prov#Submit",
+        "Dictionary": "http://www.w3.org/ns/prov#Dictionary",
+        "EmptyDictionary": "http://www.w3.org/ns/prov#EmptyDictionary",
+        "KeyEntityPair": "http://www.w3.org/ns/prov#KeyEntityPair",
+        "Insertion": "http://www.w3.org/ns/prov#Insertion",
+        "Removal": "http://www.w3.org/ns/prov#Removal",
+        "atTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "endedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#endedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "generatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "invalidatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "startedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#startedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "value": "http://www.w3.org/ns/prov#value",
+        "provenanceUriTemplate": "http://www.w3.org/ns/prov#provenanceUriTemplate",
+        "pairKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "removedKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#removedKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "actedOnBehalfOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#actedOnBehalfOf",
+          "x-jsonld-type": "@id"
+        },
+        "agent": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+          "x-jsonld-type": "@id"
+        },
+        "entity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+          "x-jsonld-type": "@id"
+        },
+        "generated": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generated",
+          "x-jsonld-type": "@id"
+        },
+        "hadActivity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+          "x-jsonld-type": "@id"
+        },
+        "activity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#activity",
+          "x-jsonld-type": "@id"
+        },
+        "hadGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "hadPlan": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPlan",
+          "x-jsonld-type": "@id"
+        },
+        "hadRole": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadRole",
+          "x-jsonld-type": "@id"
+        },
+        "hadUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadUsage",
+          "x-jsonld-type": "@id"
+        },
+        "influenced": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influenced",
+          "x-jsonld-type": "@id"
+        },
+        "influencer": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influencer",
+          "x-jsonld-type": "@id"
+        },
+        "invalidated": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidated",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedAssociation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAssociation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedCommunication": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedCommunication",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedDelegation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDelegation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedEnd": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedEnd",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInfluence": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInfluence",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedQuotation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedQuotation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRevision": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRevision",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedStart": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedStart",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedUsage",
+          "x-jsonld-type": "@id"
+        },
+        "used": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#used",
+          "x-jsonld-type": "@id"
+        },
+        "wasAssociatedWith": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasAssociatedWith",
+          "x-jsonld-type": "@id"
+        },
+        "wasEndedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasEndedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInfluencedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInfluencedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInformedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInformedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasStartedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasStartedBy",
+          "x-jsonld-type": "@id"
+        },
+        "has_anchor": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_anchor",
+          "x-jsonld-type": "@id"
+        },
+        "has_query_service": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_query_service",
+          "x-jsonld-type": "@id"
+        },
+        "describesService": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#describesService",
+          "x-jsonld-type": "@id"
+        },
+        "pingback": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pingback",
+          "x-jsonld-type": "@id"
+        },
+        "dictionary": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#dictionary",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByInsertionFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByInsertionFrom",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByRemovalFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByRemovalFrom",
+          "x-jsonld-type": "@id"
+        },
+        "insertedKeyEntityPair": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#insertedKeyEntityPair",
+          "x-jsonld-type": "@id"
+        },
+        "hadDictionaryMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadDictionaryMember",
+          "x-jsonld-type": "@id"
+        },
+        "pairEntity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairEntity",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInsertion": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInsertion",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRemoval": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRemoval",
+          "x-jsonld-type": "@id"
+        },
+        "asInBundle": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#asInBundle",
+          "x-jsonld-type": "@id"
+        },
+        "mentionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#mentionOf",
+          "x-jsonld-type": "@id"
+        },
+        "name": "http://www.w3.org/2000/01/rdf-schema#label"
+      },
+      "x-jsonld-prefixes": {
+        "prov": "http://www.w3.org/ns/prov#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dct": "http://purl.org/dc/terms/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      },
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Entity"
+        }
+      ],
+      "$defs": {
+        "EntityType": {
+          "type": "string",
+          "enum": [
+            "Entity",
+            "Bundle",
+            "Plan",
+            "prov:Entity",
+            "prov:Bundle",
+            "prov:Plan"
+          ]
+        },
+        "EntityTypes": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/EntityType"
+            },
+            {
+              "type": "array",
+              "contains": {
+                "$ref": "#/$defs/EntityType"
+              }
+            }
+          ]
+        },
+        "Entity": {
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#influenced"
+            }
+          ],
+          "anyOf": [
+            {
+              "required": [ "hadMember", "type" ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "Collection"
+                },
+                "hadMember": {
+                  "x-jsonld-id": "http://www.w3.org/ns/prov#hadMember",
+                  "x-jsonld-type": "@id",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/Entity"
+                  }
+                }
+              }
+            },
+            {
+              "required": [ "hadMember", "type" ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "EmptyCollection"
+                },
+                "hadMember": {
+                  "x-jsonld-id": "http://www.w3.org/ns/prov#hadMember",
+                  "x-jsonld-type": "@id",
+                  "type": "array",
+                  "maxItems": 0
+                }
+              }
+            },
+            {
+              "not": {
+                "required": [ "hadMember", "type" ]
+              }
+            }
+          ],
+          "required": [ "id" ],
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "provType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/EntityTypes"
+            },
+            "prov:type": {
+              "$ref": "#/$defs/EntityTypes"
+            },
+            "featureType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "entityType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "has_provenance": {
+              "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Prov"
+            },
+            "wasGeneratedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "wasAttributedTo": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+            },
+            "wasDerivedFrom": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "alternateOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "hadPrimarySource": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "specializationOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "wasInvalidatedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasInvalidatedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "wasQuotedFrom": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasQuotedFrom",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "wasRevisionOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "atLocation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#atLocation",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "links": {
+              "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#externalLink"
+              }
+            },
+            "qualifiedGeneration": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedGeneration",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Generation"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Generation"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "qualifiedInvalidation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInvalidation",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Invalidation"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Invalidation"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "qualifiedDerivation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDerivation",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Derivation"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Derivation"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "qualifiedAttribution": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAttribution",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Attribution"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Attribution"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-agent/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-agent/schema.json",
+      "description": "PROV Activity object schema",
+      "x-jsonld-extra-terms": {
+        "activityType": "@type",
+        "entityType": "@type",
+        "featureType": "@type",
+        "Activity": "http://www.w3.org/ns/prov#Activity",
+        "ActivityInfluence": "http://www.w3.org/ns/prov#ActivityInfluence",
+        "Agent": "http://www.w3.org/ns/prov#Agent",
+        "AgentInfluence": "http://www.w3.org/ns/prov#AgentInfluence",
+        "Association": "http://www.w3.org/ns/prov#Association",
+        "Attribution": "http://www.w3.org/ns/prov#Attribution",
+        "Bundle": "http://www.w3.org/ns/prov#Bundle",
+        "Collection": "http://www.w3.org/ns/prov#Collection",
+        "Communication": "http://www.w3.org/ns/prov#Communication",
+        "Delegation": "http://www.w3.org/ns/prov#Delegation",
+        "Derivation": "http://www.w3.org/ns/prov#Derivation",
+        "EmptyCollection": "http://www.w3.org/ns/prov#EmptyCollection",
+        "End": "http://www.w3.org/ns/prov#End",
+        "Entity": "http://www.w3.org/ns/prov#Entity",
+        "EntityInfluence": "http://www.w3.org/ns/prov#EntityInfluence",
+        "Generation": "http://www.w3.org/ns/prov#Generation",
+        "Influence": "http://www.w3.org/ns/prov#Influence",
+        "InstantaneousEvent": "http://www.w3.org/ns/prov#InstantaneousEvent",
+        "Invalidation": "http://www.w3.org/ns/prov#Invalidation",
+        "Location": "http://www.w3.org/ns/prov#Location",
+        "Organization": "http://www.w3.org/ns/prov#Organization",
+        "Person": "http://www.w3.org/ns/prov#Person",
+        "Plan": "http://www.w3.org/ns/prov#Plan",
+        "PrimarySource": "http://www.w3.org/ns/prov#PrimarySource",
+        "Quotation": "http://www.w3.org/ns/prov#Quotation",
+        "Revision": "http://www.w3.org/ns/prov#Revision",
+        "Role": "http://www.w3.org/ns/prov#Role",
+        "SoftwareAgent": "http://www.w3.org/ns/prov#SoftwareAgent",
+        "Start": "http://www.w3.org/ns/prov#Start",
+        "Usage": "http://www.w3.org/ns/prov#Usage",
+        "ServiceDescription": "http://www.w3.org/ns/prov#ServiceDescription",
+        "DirectQueryService": "http://www.w3.org/ns/prov#DirectQueryService",
+        "Accept": "http://www.w3.org/ns/prov#Accept",
+        "Contribute": "http://www.w3.org/ns/prov#Contribute",
+        "Contributor": "http://www.w3.org/ns/prov#Contributor",
+        "Copyright": "http://www.w3.org/ns/prov#Copyright",
+        "Create": "http://www.w3.org/ns/prov#Create",
+        "Creator": "http://www.w3.org/ns/prov#Creator",
+        "Modify": "http://www.w3.org/ns/prov#Modify",
+        "Publish": "http://www.w3.org/ns/prov#Publish",
+        "Publisher": "http://www.w3.org/ns/prov#Publisher",
+        "Replace": "http://www.w3.org/ns/prov#Replace",
+        "RightsAssignment": "http://www.w3.org/ns/prov#RightsAssignment",
+        "RightsHolder": "http://www.w3.org/ns/prov#RightsHolder",
+        "Submit": "http://www.w3.org/ns/prov#Submit",
+        "Dictionary": "http://www.w3.org/ns/prov#Dictionary",
+        "EmptyDictionary": "http://www.w3.org/ns/prov#EmptyDictionary",
+        "KeyEntityPair": "http://www.w3.org/ns/prov#KeyEntityPair",
+        "Insertion": "http://www.w3.org/ns/prov#Insertion",
+        "Removal": "http://www.w3.org/ns/prov#Removal",
+        "atTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "endedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#endedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "generatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "invalidatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "startedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#startedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "value": "http://www.w3.org/ns/prov#value",
+        "provenanceUriTemplate": "http://www.w3.org/ns/prov#provenanceUriTemplate",
+        "pairKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "removedKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#removedKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "agent": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+          "x-jsonld-type": "@id"
+        },
+        "alternateOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+          "x-jsonld-type": "@id"
+        },
+        "entity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+          "x-jsonld-type": "@id"
+        },
+        "generated": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generated",
+          "x-jsonld-type": "@id"
+        },
+        "hadActivity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+          "x-jsonld-type": "@id"
+        },
+        "activity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#activity",
+          "x-jsonld-type": "@id"
+        },
+        "hadGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "hadMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadMember",
+          "x-jsonld-type": "@id"
+        },
+        "hadPlan": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPlan",
+          "x-jsonld-type": "@id"
+        },
+        "hadPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "hadRole": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadRole",
+          "x-jsonld-type": "@id"
+        },
+        "hadUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadUsage",
+          "x-jsonld-type": "@id"
+        },
+        "influenced": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influenced",
+          "x-jsonld-type": "@id"
+        },
+        "influencer": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influencer",
+          "x-jsonld-type": "@id"
+        },
+        "invalidated": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidated",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedAssociation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAssociation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedAttribution": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAttribution",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedCommunication": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedCommunication",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedDerivation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDerivation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedEnd": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedEnd",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInfluence": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInfluence",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInvalidation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInvalidation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedQuotation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedQuotation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRevision": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRevision",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedStart": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedStart",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedUsage",
+          "x-jsonld-type": "@id"
+        },
+        "specializationOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+          "x-jsonld-type": "@id"
+        },
+        "used": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#used",
+          "x-jsonld-type": "@id"
+        },
+        "wasAssociatedWith": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasAssociatedWith",
+          "x-jsonld-type": "@id"
+        },
+        "wasAttributedTo": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+          "x-jsonld-type": "@id"
+        },
+        "wasDerivedFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+          "x-jsonld-type": "@id"
+        },
+        "wasEndedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasEndedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasGeneratedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInfluencedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInfluencedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInformedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInformedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInvalidatedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInvalidatedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasQuotedFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasQuotedFrom",
+          "x-jsonld-type": "@id"
+        },
+        "wasRevisionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+          "x-jsonld-type": "@id"
+        },
+        "wasStartedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasStartedBy",
+          "x-jsonld-type": "@id"
+        },
+        "has_anchor": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_anchor",
+          "x-jsonld-type": "@id"
+        },
+        "has_provenance": {
+          "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+          "x-jsonld-type": "@id"
+        },
+        "has_query_service": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_query_service",
+          "x-jsonld-type": "@id"
+        },
+        "describesService": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#describesService",
+          "x-jsonld-type": "@id"
+        },
+        "pingback": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pingback",
+          "x-jsonld-type": "@id"
+        },
+        "dictionary": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#dictionary",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByInsertionFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByInsertionFrom",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByRemovalFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByRemovalFrom",
+          "x-jsonld-type": "@id"
+        },
+        "insertedKeyEntityPair": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#insertedKeyEntityPair",
+          "x-jsonld-type": "@id"
+        },
+        "hadDictionaryMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadDictionaryMember",
+          "x-jsonld-type": "@id"
+        },
+        "pairEntity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairEntity",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInsertion": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInsertion",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRemoval": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRemoval",
+          "x-jsonld-type": "@id"
+        },
+        "asInBundle": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#asInBundle",
+          "x-jsonld-type": "@id"
+        },
+        "mentionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#mentionOf",
+          "x-jsonld-type": "@id"
+        },
+        "links": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+      },
+      "x-jsonld-prefixes": {
+        "prov": "http://www.w3.org/ns/prov#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dct": "http://purl.org/dc/terms/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      },
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Agent"
+        }
+      ],
+      "$defs": {
+        "dateTime": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})?$",
+          "format": "date-time"
+        },
+        "AgentTypes": {
+          "type": "string",
+          "enum": [
+            "Agent",
+            "Organization",
+            "Person",
+            "SoftwareAgent",
+            "SoftwareDescription",
+            "DirectQueryService",
+            "prov:Agent",
+            "prov:Organization",
+            "prov:Person",
+            "prov:SoftwareAgent",
+            "prov:SoftwareDescription",
+            "prov:DirectQueryService"
+          ]
+        },
+        "AgentType": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AgentTypes"
+            },
+            {
+              "type": "array",
+              "items": {
+                "contains": {
+                  "$ref": "#/$defs/AgentTypes"
+                }
+              }
+            }
+          ]
+        },
+        "Agent": {
+          "$anchor": "Agent",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#influenced"
+            }
+          ],
+          "oneOf": [
+            {
+              "required": [ "name" ]
+            },
+            {
+              "required": [ "id" ]
+            }
+          ],
+          "properties": {
+            "agentType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "provType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/AgentType"
+            },
+            "prov:type": {
+              "$ref": "#/$defs/AgentType"
+            },
+            "name": {
+              "x-jsonld-id": "http://www.w3.org/2000/01/rdf-schema#label",
+              "type": "string"
+            },
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "actedOnBehalfOf": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#actedOnBehalfOf",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+            },
+            "atLocation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#atLocation",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "qualifiedDelegation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDelegation",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Delegation"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json#Delegation"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "Association": {
+          "$anchor": "Association",
+          "type": "object",
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "const": "Association"
+                },
+                {
+                  "type": "array",
+                  "contains": {
+                    "type": "string",
+                    "const": "Association"
+                  },
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "agent": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Agent"
+                }
+              ]
+            },
+            "hadRole": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadRole",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "hadPlan": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadPlan",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            }
+          }
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json",
+      "description": "PROV Activity object schema",
+      "x-jsonld-extra-terms": {
+        "agentType": "@type",
+        "entityType": "@type",
+        "featureType": "@type",
+        "Activity": "http://www.w3.org/ns/prov#Activity",
+        "ActivityInfluence": "http://www.w3.org/ns/prov#ActivityInfluence",
+        "Agent": "http://www.w3.org/ns/prov#Agent",
+        "AgentInfluence": "http://www.w3.org/ns/prov#AgentInfluence",
+        "Association": "http://www.w3.org/ns/prov#Association",
+        "Attribution": "http://www.w3.org/ns/prov#Attribution",
+        "Bundle": "http://www.w3.org/ns/prov#Bundle",
+        "Collection": "http://www.w3.org/ns/prov#Collection",
+        "Communication": "http://www.w3.org/ns/prov#Communication",
+        "Delegation": "http://www.w3.org/ns/prov#Delegation",
+        "Derivation": "http://www.w3.org/ns/prov#Derivation",
+        "EmptyCollection": "http://www.w3.org/ns/prov#EmptyCollection",
+        "End": "http://www.w3.org/ns/prov#End",
+        "Entity": "http://www.w3.org/ns/prov#Entity",
+        "EntityInfluence": "http://www.w3.org/ns/prov#EntityInfluence",
+        "Generation": "http://www.w3.org/ns/prov#Generation",
+        "Influence": "http://www.w3.org/ns/prov#Influence",
+        "InstantaneousEvent": "http://www.w3.org/ns/prov#InstantaneousEvent",
+        "Invalidation": "http://www.w3.org/ns/prov#Invalidation",
+        "Location": "http://www.w3.org/ns/prov#Location",
+        "Organization": "http://www.w3.org/ns/prov#Organization",
+        "Person": "http://www.w3.org/ns/prov#Person",
+        "Plan": "http://www.w3.org/ns/prov#Plan",
+        "PrimarySource": "http://www.w3.org/ns/prov#PrimarySource",
+        "Quotation": "http://www.w3.org/ns/prov#Quotation",
+        "Revision": "http://www.w3.org/ns/prov#Revision",
+        "Role": "http://www.w3.org/ns/prov#Role",
+        "SoftwareAgent": "http://www.w3.org/ns/prov#SoftwareAgent",
+        "Start": "http://www.w3.org/ns/prov#Start",
+        "Usage": "http://www.w3.org/ns/prov#Usage",
+        "ServiceDescription": "http://www.w3.org/ns/prov#ServiceDescription",
+        "DirectQueryService": "http://www.w3.org/ns/prov#DirectQueryService",
+        "Accept": "http://www.w3.org/ns/prov#Accept",
+        "Contribute": "http://www.w3.org/ns/prov#Contribute",
+        "Contributor": "http://www.w3.org/ns/prov#Contributor",
+        "Copyright": "http://www.w3.org/ns/prov#Copyright",
+        "Create": "http://www.w3.org/ns/prov#Create",
+        "Creator": "http://www.w3.org/ns/prov#Creator",
+        "Modify": "http://www.w3.org/ns/prov#Modify",
+        "Publish": "http://www.w3.org/ns/prov#Publish",
+        "Publisher": "http://www.w3.org/ns/prov#Publisher",
+        "Replace": "http://www.w3.org/ns/prov#Replace",
+        "RightsAssignment": "http://www.w3.org/ns/prov#RightsAssignment",
+        "RightsHolder": "http://www.w3.org/ns/prov#RightsHolder",
+        "Submit": "http://www.w3.org/ns/prov#Submit",
+        "Dictionary": "http://www.w3.org/ns/prov#Dictionary",
+        "EmptyDictionary": "http://www.w3.org/ns/prov#EmptyDictionary",
+        "KeyEntityPair": "http://www.w3.org/ns/prov#KeyEntityPair",
+        "Insertion": "http://www.w3.org/ns/prov#Insertion",
+        "Removal": "http://www.w3.org/ns/prov#Removal",
+        "atTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "generatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "invalidatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "startedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#startedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "value": "http://www.w3.org/ns/prov#value",
+        "provenanceUriTemplate": "http://www.w3.org/ns/prov#provenanceUriTemplate",
+        "pairKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "removedKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#removedKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "actedOnBehalfOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#actedOnBehalfOf",
+          "x-jsonld-type": "@id"
+        },
+        "agent": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+          "x-jsonld-type": "@id"
+        },
+        "alternateOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+          "x-jsonld-type": "@id"
+        },
+        "entity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+          "x-jsonld-type": "@id"
+        },
+        "hadActivity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+          "x-jsonld-type": "@id"
+        },
+        "activity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#activity",
+          "x-jsonld-type": "@id"
+        },
+        "hadGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "hadMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadMember",
+          "x-jsonld-type": "@id"
+        },
+        "hadPlan": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPlan",
+          "x-jsonld-type": "@id"
+        },
+        "hadPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "hadRole": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadRole",
+          "x-jsonld-type": "@id"
+        },
+        "hadUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadUsage",
+          "x-jsonld-type": "@id"
+        },
+        "influenced": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influenced",
+          "x-jsonld-type": "@id"
+        },
+        "influencer": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influencer",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedAttribution": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAttribution",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedDelegation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDelegation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedDerivation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDerivation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInfluence": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInfluence",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInvalidation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInvalidation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedQuotation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedQuotation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRevision": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRevision",
+          "x-jsonld-type": "@id"
+        },
+        "specializationOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+          "x-jsonld-type": "@id"
+        },
+        "wasAttributedTo": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+          "x-jsonld-type": "@id"
+        },
+        "wasDerivedFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+          "x-jsonld-type": "@id"
+        },
+        "wasGeneratedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInfluencedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInfluencedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInvalidatedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInvalidatedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasQuotedFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasQuotedFrom",
+          "x-jsonld-type": "@id"
+        },
+        "wasRevisionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+          "x-jsonld-type": "@id"
+        },
+        "has_anchor": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_anchor",
+          "x-jsonld-type": "@id"
+        },
+        "has_provenance": {
+          "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+          "x-jsonld-type": "@id"
+        },
+        "has_query_service": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_query_service",
+          "x-jsonld-type": "@id"
+        },
+        "describesService": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#describesService",
+          "x-jsonld-type": "@id"
+        },
+        "pingback": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pingback",
+          "x-jsonld-type": "@id"
+        },
+        "dictionary": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#dictionary",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByInsertionFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByInsertionFrom",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByRemovalFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByRemovalFrom",
+          "x-jsonld-type": "@id"
+        },
+        "insertedKeyEntityPair": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#insertedKeyEntityPair",
+          "x-jsonld-type": "@id"
+        },
+        "hadDictionaryMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadDictionaryMember",
+          "x-jsonld-type": "@id"
+        },
+        "pairEntity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairEntity",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInsertion": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInsertion",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRemoval": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRemoval",
+          "x-jsonld-type": "@id"
+        },
+        "asInBundle": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#asInBundle",
+          "x-jsonld-type": "@id"
+        },
+        "mentionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#mentionOf",
+          "x-jsonld-type": "@id"
+        },
+        "name": "http://www.w3.org/2000/01/rdf-schema#label",
+        "links": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+      },
+      "x-jsonld-prefixes": {
+        "prov": "http://www.w3.org/ns/prov#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dct": "http://purl.org/dc/terms/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      },
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Activity"
+        }
+      ],
+      "$defs": {
+        "dateTime": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})?$",
+          "format": "date-time"
+        },
+        "ActivityTypes": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [ "Activity", "prov:Activity" ]
+            },
+            {
+              "type": "array",
+              "contains": {
+                "type": "string",
+                "enum": [ "Activity", "prov:Activity" ]
+              },
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "Activity": {
+          "$anchor": "Activity",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#influenced"
+            }
+          ],
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "provType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/ActivityTypes"
+            },
+            "prov:type": {
+              "$ref": "#/$defs/ActivityTypes"
+            },
+            "activityType": {
+              "x-jsonld-id": "@type",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "endedAtTime": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#endedAtTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime",
+              "$ref": "#/$defs/dateTime"
+            },
+            "wasAssociatedWith": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasAssociatedWith",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+            },
+            "wasInformedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasInformedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "used": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#used",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "wasStartedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasStartedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "wasEndedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasEndedBy",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "invalidated": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#invalidated",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "generated": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#generated",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "atLocation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#atLocation",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "qualifiedUsage": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedUsage",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Usage"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/Usage"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "qualifiedCommunication": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedCommunication",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Communication"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/Generation"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "qualifiedStart": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedStart",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Start"
+                }
+              ]
+            },
+            "qualifiedEnd": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedEnd",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/End"
+                }
+              ]
+            },
+            "qualifiedAssociation": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAssociation",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Association"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Association"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "Usage": {
+          "$anchor": "Usage",
+          "type": "object",
+          "required": [ "entity" ],
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "enum": [ "prov:Usage", "Usage" ]
+                },
+                {
+                  "type": "array",
+                  "contains": {
+                    "type": "string",
+                    "enum": [ "prov:Usage", "Usage" ]
+                  },
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "atTime": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime",
+              "$ref": "#/$defs/dateTime"
+            },
+            "entity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            }
+          }
+        },
+        "ActivityInfluence": {
+          "$anchor": "ActivityInfluence",
+          "type": "object",
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "atTime": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime",
+              "$ref": "#/$defs/dateTime"
+            },
+            "hadRole": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadRole",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "influencer": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#influencer",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreObjectref"
+            },
+            "hadActivity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "activity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#activity",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            }
+          }
+        },
+        "Generation": {
+          "$anchor": "Generation",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ActivityInfluence"
+            },
+            {
+              "type": "object",
+              "required": [ "type" ],
+              "properties": {
+                "type": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "const": "Generation"
+                    },
+                    {
+                      "type": "array",
+                      "contains": {
+                        "type": "string",
+                        "const": "Generation"
+                      },
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "Invalidation": {
+          "$anchor": "Invalidation",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ActivityInfluence"
+            },
+            {
+              "type": "object",
+              "required": [ "type" ],
+              "properties": {
+                "type": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "const": "Invalidation"
+                    },
+                    {
+                      "type": "array",
+                      "contains": {
+                        "type": "string",
+                        "const": "Invalidation"
+                      },
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "Communication": {
+          "$anchor": "Communication",
+          "allOf": [
+            {
+              "$ref": "#/$defs/ActivityInfluence"
+            },
+            {
+              "type": "object",
+              "required": [ "type" ],
+              "properties": {
+                "type": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "const": "Communication"
+                    },
+                    {
+                      "type": "array",
+                      "contains": {
+                        "type": "string",
+                        "const": "Communication"
+                      },
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "Derivation": {
+          "$anchor": "Derivation",
+          "type": "object",
+          "required": [ "atTime", "entity" ],
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "const": "Derivation"
+                },
+                {
+                  "type": "array",
+                  "contains": {
+                    "type": "string",
+                    "const": "Derivation"
+                  },
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "hadGeneration": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadGeneration",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Generation"
+                }
+              ]
+            },
+            "hadActivity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Activity"
+                }
+              ]
+            },
+            "hadUsage": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadUsage",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Usage"
+                }
+              ]
+            },
+            "entity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Entity"
+                }
+              ]
+            }
+          }
+        },
+        "Delegation": {
+          "$anchor": "Delegation",
+          "type": "object",
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "const": "Delegation"
+                },
+                {
+                  "type": "array",
+                  "contains": {
+                    "type": "string",
+                    "const": "Delegation"
+                  },
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "agent": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Agent"
+                }
+              ]
+            },
+            "hadActivity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Activity"
+                }
+              ]
+            }
+          }
+        },
+        "Attribution": {
+          "$anchor": "Attribution",
+          "type": "object",
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "const": "Attribution"
+                },
+                {
+                  "type": "array",
+                  "contains": {
+                    "type": "string",
+                    "const": "Attribution"
+                  },
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "agent": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Agent"
+                }
+              ]
+            }
+          }
+        },
+        "StartOrEnd": {
+          "type": "object",
+          "required": [ "atTime" ],
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "atTime": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+              "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime",
+              "$ref": "#/$defs/dateTime"
+            },
+            "entity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Entity"
+                }
+              ]
+            },
+            "hadActivity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+                },
+                {
+                  "$ref": "#/$defs/Activity"
+                }
+              ]
+            }
+          }
+        },
+        "Start": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/StartOrEnd"
+            },
+            {
+              "properties": {
+                "type": {
+                  "anyOf": [
+                    {
+                      "const": "Start"
+                    },
+                    {
+                      "contains": {
+                        "const": "Start"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "End": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/StartOrEnd"
+            },
+            {
+              "properties": {
+                "type": {
+                  "anyOf": [
+                    {
+                      "const": "End"
+                    },
+                    {
+                      "contains": {
+                        "const": "End"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json",
+      "description": "Provenance Chain using PROV-O core model supporting both an ID based object graph and nesting",
+      "x-jsonld-extra-terms": {
+        "activityType": "@type",
+        "agentType": "@type",
+        "entityType": "@type",
+        "featureType": "@type",
+        "provType": "@type",
+        "Activity": "http://www.w3.org/ns/prov#Activity",
+        "ActivityInfluence": "http://www.w3.org/ns/prov#ActivityInfluence",
+        "Agent": "http://www.w3.org/ns/prov#Agent",
+        "AgentInfluence": "http://www.w3.org/ns/prov#AgentInfluence",
+        "Association": "http://www.w3.org/ns/prov#Association",
+        "Attribution": "http://www.w3.org/ns/prov#Attribution",
+        "Bundle": "http://www.w3.org/ns/prov#Bundle",
+        "Collection": "http://www.w3.org/ns/prov#Collection",
+        "Communication": "http://www.w3.org/ns/prov#Communication",
+        "Delegation": "http://www.w3.org/ns/prov#Delegation",
+        "Derivation": "http://www.w3.org/ns/prov#Derivation",
+        "EmptyCollection": "http://www.w3.org/ns/prov#EmptyCollection",
+        "End": "http://www.w3.org/ns/prov#End",
+        "Entity": "http://www.w3.org/ns/prov#Entity",
+        "EntityInfluence": "http://www.w3.org/ns/prov#EntityInfluence",
+        "Generation": "http://www.w3.org/ns/prov#Generation",
+        "Influence": "http://www.w3.org/ns/prov#Influence",
+        "InstantaneousEvent": "http://www.w3.org/ns/prov#InstantaneousEvent",
+        "Invalidation": "http://www.w3.org/ns/prov#Invalidation",
+        "Location": "http://www.w3.org/ns/prov#Location",
+        "Organization": "http://www.w3.org/ns/prov#Organization",
+        "Person": "http://www.w3.org/ns/prov#Person",
+        "Plan": "http://www.w3.org/ns/prov#Plan",
+        "PrimarySource": "http://www.w3.org/ns/prov#PrimarySource",
+        "Quotation": "http://www.w3.org/ns/prov#Quotation",
+        "Revision": "http://www.w3.org/ns/prov#Revision",
+        "Role": "http://www.w3.org/ns/prov#Role",
+        "SoftwareAgent": "http://www.w3.org/ns/prov#SoftwareAgent",
+        "Start": "http://www.w3.org/ns/prov#Start",
+        "Usage": "http://www.w3.org/ns/prov#Usage",
+        "ServiceDescription": "http://www.w3.org/ns/prov#ServiceDescription",
+        "DirectQueryService": "http://www.w3.org/ns/prov#DirectQueryService",
+        "Accept": "http://www.w3.org/ns/prov#Accept",
+        "Contribute": "http://www.w3.org/ns/prov#Contribute",
+        "Contributor": "http://www.w3.org/ns/prov#Contributor",
+        "Copyright": "http://www.w3.org/ns/prov#Copyright",
+        "Create": "http://www.w3.org/ns/prov#Create",
+        "Creator": "http://www.w3.org/ns/prov#Creator",
+        "Modify": "http://www.w3.org/ns/prov#Modify",
+        "Publish": "http://www.w3.org/ns/prov#Publish",
+        "Publisher": "http://www.w3.org/ns/prov#Publisher",
+        "Replace": "http://www.w3.org/ns/prov#Replace",
+        "RightsAssignment": "http://www.w3.org/ns/prov#RightsAssignment",
+        "RightsHolder": "http://www.w3.org/ns/prov#RightsHolder",
+        "Submit": "http://www.w3.org/ns/prov#Submit",
+        "Dictionary": "http://www.w3.org/ns/prov#Dictionary",
+        "EmptyDictionary": "http://www.w3.org/ns/prov#EmptyDictionary",
+        "KeyEntityPair": "http://www.w3.org/ns/prov#KeyEntityPair",
+        "Insertion": "http://www.w3.org/ns/prov#Insertion",
+        "Removal": "http://www.w3.org/ns/prov#Removal",
+        "atTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#atTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "endedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#endedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "generatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "invalidatedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidatedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "startedAtTime": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#startedAtTime",
+          "x-jsonld-type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "value": "http://www.w3.org/ns/prov#value",
+        "provenanceUriTemplate": "http://www.w3.org/ns/prov#provenanceUriTemplate",
+        "pairKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "removedKey": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#removedKey",
+          "x-jsonld-type": "http://www.w3.org/2000/01/rdf-schema#Literal"
+        },
+        "actedOnBehalfOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#actedOnBehalfOf",
+          "x-jsonld-type": "@id"
+        },
+        "agent": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+          "x-jsonld-type": "@id"
+        },
+        "alternateOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#alternateOf",
+          "x-jsonld-type": "@id"
+        },
+        "atLocation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#atLocation",
+          "x-jsonld-type": "@id"
+        },
+        "entity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+          "x-jsonld-type": "@id"
+        },
+        "generated": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#generated",
+          "x-jsonld-type": "@id"
+        },
+        "hadActivity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadActivity",
+          "x-jsonld-type": "@id"
+        },
+        "activity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#activity",
+          "x-jsonld-type": "@id"
+        },
+        "hadGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "hadMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadMember",
+          "x-jsonld-type": "@id"
+        },
+        "hadPlan": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPlan",
+          "x-jsonld-type": "@id"
+        },
+        "hadPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "hadRole": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadRole",
+          "x-jsonld-type": "@id"
+        },
+        "hadUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadUsage",
+          "x-jsonld-type": "@id"
+        },
+        "influenced": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influenced",
+          "x-jsonld-type": "@id"
+        },
+        "influencer": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#influencer",
+          "x-jsonld-type": "@id"
+        },
+        "invalidated": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#invalidated",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedAssociation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAssociation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedAttribution": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedAttribution",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedCommunication": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedCommunication",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedDelegation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDelegation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedDerivation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedDerivation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedEnd": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedEnd",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedGeneration": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedGeneration",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInfluence": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInfluence",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInvalidation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInvalidation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedPrimarySource": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedPrimarySource",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedQuotation": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedQuotation",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRevision": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRevision",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedStart": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedStart",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedUsage": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedUsage",
+          "x-jsonld-type": "@id"
+        },
+        "specializationOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#specializationOf",
+          "x-jsonld-type": "@id"
+        },
+        "used": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#used",
+          "x-jsonld-type": "@id"
+        },
+        "wasAssociatedWith": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasAssociatedWith",
+          "x-jsonld-type": "@id"
+        },
+        "wasAttributedTo": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasAttributedTo",
+          "x-jsonld-type": "@id"
+        },
+        "wasDerivedFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+          "x-jsonld-type": "@id"
+        },
+        "wasEndedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasEndedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasGeneratedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasGeneratedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInfluencedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInfluencedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInformedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInformedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasInvalidatedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasInvalidatedBy",
+          "x-jsonld-type": "@id"
+        },
+        "wasQuotedFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasQuotedFrom",
+          "x-jsonld-type": "@id"
+        },
+        "wasRevisionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasRevisionOf",
+          "x-jsonld-type": "@id"
+        },
+        "wasStartedBy": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#wasStartedBy",
+          "x-jsonld-type": "@id"
+        },
+        "has_anchor": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_anchor",
+          "x-jsonld-type": "@id"
+        },
+        "has_provenance": {
+          "x-jsonld-id": "http://purl.org/dc/terms/provenance",
+          "x-jsonld-type": "@id"
+        },
+        "has_query_service": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#has_query_service",
+          "x-jsonld-type": "@id"
+        },
+        "describesService": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#describesService",
+          "x-jsonld-type": "@id"
+        },
+        "pingback": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pingback",
+          "x-jsonld-type": "@id"
+        },
+        "dictionary": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#dictionary",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByInsertionFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByInsertionFrom",
+          "x-jsonld-type": "@id"
+        },
+        "derivedByRemovalFrom": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#derivedByRemovalFrom",
+          "x-jsonld-type": "@id"
+        },
+        "insertedKeyEntityPair": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#insertedKeyEntityPair",
+          "x-jsonld-type": "@id"
+        },
+        "hadDictionaryMember": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#hadDictionaryMember",
+          "x-jsonld-type": "@id"
+        },
+        "pairEntity": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#pairEntity",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedInsertion": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInsertion",
+          "x-jsonld-type": "@id"
+        },
+        "qualifiedRemoval": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedRemoval",
+          "x-jsonld-type": "@id"
+        },
+        "asInBundle": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#asInBundle",
+          "x-jsonld-type": "@id"
+        },
+        "mentionOf": {
+          "x-jsonld-id": "http://www.w3.org/ns/prov#mentionOf",
+          "x-jsonld-type": "@id"
+        },
+        "id": "@id",
+        "name": "http://www.w3.org/2000/01/rdf-schema#label",
+        "links": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+      },
+      "x-jsonld-prefixes": {
+        "prov": "http://www.w3.org/ns/prov#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "dct": "http://purl.org/dc/terms/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      },
+      "anyOf": [
+        {
+          "$ref": "#Prov"
+        },
+        {
+          "$ref": "#/$defs/EntityWithRequirements"
+        },
+        {
+          "$ref": "#/$defs/ActivityWithRequirements"
+        }
+      ],
+      "$defs": {
+        "objectref": {
+          "$anchor": "objectref",
+          "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/iri-or-curie/schema.json"
+        },
+        "oneOrMoreObjectref": {
+          "$anchor": "oneOrMoreObjectref",
+          "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/iri-or-curie/schema.json#/$defs/MultipleOrObject"
+        },
+        "oneOrMoreActivitiesOrRefIds": {
+          "$anchor": "oneOrMoreActivitiesOrRefIds",
+          "oneOf": [
+            {
+              "$ref": "#objectref"
+            },
+            {
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Activity"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#objectref"
+                  },
+                  {
+                    "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Activity"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "oneOrMoreEntitiesOrRefIds": {
+          "$anchor": "oneOrMoreEntitiesOrRefIds",
+          "oneOf": [
+            {
+              "$ref": "#objectref"
+            },
+            {
+              "$ref": "#Entity"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#objectref"
+                  },
+                  {
+                    "$ref": "#Entity"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "oneOrMoreAgentsOrRefIds": {
+          "$anchor": "oneOrMoreAgentsOrRefIds",
+          "oneOf": [
+            {
+              "$ref": "#objectref"
+            },
+            {
+              "$ref": "#externalLink"
+            },
+            {
+              "$ref": "#Agent"
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#objectref"
+                  },
+                  {
+                    "$ref": "#Agent"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "externalLink": {
+          "$anchor": "externalLink",
+          "$ref": "#/$defs/https://"opengeospatial.github.io/bblocks/annotated-schemas/ogc-utils/json-link/schema.json"
+        },
+        "Entity": {
+          "$anchor": "Entity",
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-entity/schema.json"
+        },
+        "EntityWithRequirements": {
+          "allOf": [
+            {
+              "$ref": "#Entity"
+            },
+            {
+              "anyOf": [
+                {
+                  "required": [ "provType" ]
+                },
+                {
+                  "required": [ "prov:type" ]
+                },
+                {
+                  "required": [ "type" ]
+                },
+                {
+                  "required": [ "featureType" ]
+                },
+                {
+                  "required": [ "entityType" ]
+                },
+                {
+                  "required": [ "wasGeneratedBy" ]
+                },
+                {
+                  "required": [ "wasAttributedTo" ]
+                },
+                {
+                  "required": [ "wasDerivedFrom" ]
+                },
+                {
+                  "required": [ "has_provenance" ]
+                }
+              ]
+            }
+          ]
+        },
+        "Activity": {
+          "$anchor": "Activity",
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-activity/schema.json"
+        },
+        "ActivityWithRequirements": {
+          "allOf": [
+            {
+              "$ref": "#Activity"
+            },
+            {
+              "anyOf": [
+                {
+                  "required": [ "provType" ]
+                },
+                {
+                  "required": [ "prov:type" ]
+                },
+                {
+                  "required": [ "type" ]
+                },
+                {
+                  "required": [ "used" ]
+                },
+                {
+                  "required": [ "wasInformedBy" ]
+                },
+                {
+                  "required": [ "endedAtTime" ]
+                },
+                {
+                  "required": [ "startedAtTime" ]
+                },
+                {
+                  "required": [ "wasAssociatedWith" ]
+                }
+              ]
+            }
+          ]
+        },
+        "Agent": {
+          "$anchor": "Agent",
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-agent/schema.json"
+        },
+        "AgentWithRequirements": {
+          "allOf": [
+            {
+              "$ref": "#Agent"
+            },
+            {
+              "anyOf": [
+                {
+                  "required": [ "provType" ]
+                },
+                {
+                  "required": [ "type" ]
+                },
+                {
+                  "required": [ "agentType" ]
+                },
+                {
+                  "required": [ "prov:type" ]
+                },
+                {
+                  "required": [ "actedOnBehalfOf" ]
+                }
+              ]
+            }
+          ]
+        },
+        "Association": {
+          "$anchor": "Association",
+          "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov-agent/schema.json#Association"
+        },
+        "Influence": {
+          "$anchor": "Influence",
+          "type": "object",
+          "anyOf": [
+            {
+              "required": [ "influencer" ]
+            },
+            {
+              "required": [ "entity" ]
+            },
+            {
+              "required": [ "activity" ]
+            },
+            {
+              "required": [ "agent" ]
+            }
+          ],
+          "properties": {
+            "id": {
+              "x-jsonld-id": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#objectref"
+            },
+            "influencer": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#influencer",
+              "x-jsonld-type": "@id",
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+                }
+              ]
+            },
+            "entity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#entity",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreEntitiesOrRefIds"
+            },
+            "activity": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#activity",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreActivitiesOrRefIds"
+            },
+            "agent": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#agent",
+              "x-jsonld-type": "@id",
+              "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#oneOrMoreAgentsOrRefIds"
+            }
+          }
+        },
+        "influenced": {
+          "$anchor": "influenced",
+          "type": "object",
+          "properties": {
+            "wasInfluencedBy": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#wasInfluencedBy",
+              "x-jsonld-type": "@id",
+              "anyOf": [
+                {
+                  "$ref": "#oneOrMoreActivitiesOrRefIds"
+                },
+                {
+                  "$ref": "#oneOrMoreEntitiesOrRefIds"
+                },
+                {
+                  "$ref": "#oneOrMoreAgentsOrRefIds"
+                }
+              ]
+            },
+            "qualifiedInfluence": {
+              "x-jsonld-id": "http://www.w3.org/ns/prov#qualifiedInfluence",
+              "x-jsonld-type": "@id",
+              "oneOf": [
+                {
+                  "$ref": "#objectref"
+                },
+                {
+                  "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Influence"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#objectref"
+                      },
+                      {
+                        "$ref": "#/$defs/https://"ogcincubator.github.io/bblock-prov-schema/build/annotated/ogc-utils/prov/schema.json#Influence"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "Prov": {
+          "$anchor": "Prov",
+          "description": "An list of provenance objects linked together to form a provenance chain for the current object. Objects may have nested objects as well, with or without referencable ids",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/EntityWithRequirements"
+              },
+              {
+                "$ref": "#/$defs/AgentWithRequirements"
+              },
+              {
+                "$ref": "#/$defs/ActivityWithRequirements"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/geodcat-records/schema.json",
+      "description": "Schema for OGCAPI records profile for GeoDCAT - defines all extra elements defined by GeoDCAT so that the JSON-LD context can map to GeoDCAT RDF",
+      "allOf": [
+        {
+          "$ref": "#/$defs/https://"ogcincubator.github.io/geodcat-ogcapi-records/build/annotated/geo/geodcat/dcat-records/schema.json"
+        },
+        {
+          "description": "Other elements required for DCAT"
+        }
+      ]
+    }
+  }
+}
